@@ -131,18 +131,6 @@ body{
     font-size:0;
 }
 
-.name-field,
-.phone-field,
-.city-field{
-    right:19%;
-    width:62%;
-}
-
-.msg-field{
-    right:19%;
-    width:62%;
-}
-
 /* כפתור וואטסאפ קטן מתחת */
 .whatsapp-btn{
     position:absolute;
@@ -325,44 +313,22 @@ ${message}
     `;
 }
 
-const wrapper = document.querySelector(".wrapper");
+window.addEventListener("focusout", () => {
 
-function isFormFieldActive(){
-    return document.activeElement.matches(
-        ".name-field, .phone-field, .city-field, .msg-field"
-    );
-}
+    setTimeout(() => {
 
-fields.forEach(field => {
-
-    field.addEventListener("focus", () => {
-        wrapper.classList.add("form-focused");
-    });
-
-    field.addEventListener("blur", () => {
-        setTimeout(() => {
-            if(!isFormFieldActive()){
-                wrapper.classList.remove("form-focused");
-            }
-        }, 150);
-    });
-
-});
-
-/* בעיקר לאייפון/אנדרואיד — מזהה סגירת מקלדת */
-if(window.visualViewport){
-    let lastHeight = window.visualViewport.height;
-
-    window.visualViewport.addEventListener("resize", () => {
-        const currentHeight = window.visualViewport.height;
-
-        if(currentHeight > lastHeight + 80){
-            wrapper.classList.remove("form-focused");
+        if (
+            !document.activeElement ||
+            document.activeElement.tagName !== "INPUT" &&
+            document.activeElement.tagName !== "TEXTAREA"
+        ) {
+            document.querySelector(".wrapper")
+                .classList.remove("form-focused");
         }
 
-        lastHeight = currentHeight;
-    });
-}
+    }, 300);
+
+});
 
 form.addEventListener("submit", function(e){
 
