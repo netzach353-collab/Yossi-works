@@ -313,6 +313,17 @@ ${message}
     `;
 }
 
+document
+.querySelectorAll('input, textarea')
+.forEach(el => {
+
+    el.addEventListener('focus', () => {
+        document.querySelector('.wrapper')
+            .classList.add('form-focused');
+    });
+
+});
+
 window.addEventListener("focusout", () => {
 
     setTimeout(() => {
