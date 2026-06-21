@@ -80,7 +80,7 @@ body{
     height:3%;
     background: white !important;
     padding:0 5px 0 15px;
-    font-size: 10px !important;
+    font-size: 12px !important;
 }
 
 /* טלפון */
@@ -131,6 +131,18 @@ body{
     font-size:0;
 }
 
+.name-field,
+.phone-field,
+.city-field{
+    right:19%;
+    width:62%;
+}
+
+.msg-field{
+    right:19%;
+    width:62%;
+}
+
 /* כפתור וואטסאפ קטן מתחת */
 .whatsapp-btn{
     position:absolute;
@@ -146,7 +158,53 @@ body{
     font-weight:bold;
     cursor:pointer;
 }
+@media(min-width:600px){
+    /* שם מלא */
+.name-field{
+    top:59%;
+    right:20.3%;
+    width:60%;
+    height:3%;
+    background: white !important;
+    padding:0 5px 0 15px;
+    font-size: 12px !important;
+}
 
+    /* טלפון */
+.phone-field{
+   top:64%;
+    right:20%;
+    width:60%;
+    height:3%;
+   background: white !important;
+    padding:0 5px 0 15px;
+    font-size: 12px !important;
+}
+
+/* עיר */
+.city-field{
+    top:68.55%;
+    right:20%;
+    width:61%;
+    height:4%;
+    background: white !important;
+    padding:0 5px 0 15px;
+    font-size: 12px !important;
+}
+
+/* מה צריך לתקן */
+.msg-field{
+    top:74.8%;
+    right:21%;
+    width:61%;
+    height:7.4%;
+        background: white !important;
+    padding:0px 5px 10px 15px;
+    resize:none;
+    font-size: 12px !important;
+    font-weight: 300 !important;
+}
+}
 /* מובייל */
 @media(max-width:500px){
     body{
@@ -267,40 +325,44 @@ ${message}
     `;
 }
 
+const wrapper = document.querySelector(".wrapper");
 
-
-const fields = document.querySelectorAll(
-  '.name-field, .phone-field, .city-field, .msg-field'
-);
+function isFormFieldActive(){
+    return document.activeElement.matches(
+        ".name-field, .phone-field, .city-field, .msg-field"
+    );
+}
 
 fields.forEach(field => {
 
-    field.addEventListener('focus', () => {
-        document.querySelector('.wrapper')
-            .classList.add('form-focused');
+    field.addEventListener("focus", () => {
+        wrapper.classList.add("form-focused");
     });
 
-    field.addEventListener('blur', () => {
-
+    field.addEventListener("blur", () => {
         setTimeout(() => {
-
-            const active = document.activeElement;
-
-            if(
-                !active.classList.contains('name-field') &&
-                !active.classList.contains('phone-field') &&
-                !active.classList.contains('city-field') &&
-                !active.classList.contains('msg-field')
-            ){
-                document.querySelector('.wrapper')
-                    .classList.remove('form-focused');
+            if(!isFormFieldActive()){
+                wrapper.classList.remove("form-focused");
             }
-
-        },100);
-
+        }, 150);
     });
 
 });
+
+/* בעיקר לאייפון/אנדרואיד — מזהה סגירת מקלדת */
+if(window.visualViewport){
+    let lastHeight = window.visualViewport.height;
+
+    window.visualViewport.addEventListener("resize", () => {
+        const currentHeight = window.visualViewport.height;
+
+        if(currentHeight > lastHeight + 80){
+            wrapper.classList.remove("form-focused");
+        }
+
+        lastHeight = currentHeight;
+    });
+}
 
 form.addEventListener("submit", function(e){
 
