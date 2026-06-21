@@ -214,34 +214,36 @@ body{
     }
 }
 
+
+
 .wrapper{
-    position:relative;
-    width:100%;
-    max-width:800px;
-    transition:transform .25s ease;
-}
-.wrapper{
-transform-origin: right !important;
+    transform-origin:center center;
 }
 
-.wrapper.form-focused{
-    transform:scale(1.03);
+.wrapper.zoom-in{
+    animation: zoomInNormal .25s ease forwards;
 }
 
-.wrapper.form-focused{
-    transform:scale(1.06);
+.wrapper.zoom-out{
+    animation: zoomOutNormal .25s ease forwards;
 }
 
-@media (max-width: 768px){
-
-    .wrapper{
-        transition:transform .3s ease;
+@keyframes zoomInNormal{
+    from{
+        transform:scale(1);
     }
-
-    .wrapper.form-focused{
+    to{
         transform:scale(1.35);
     }
+}
 
+@keyframes zoomOutNormal{
+    from{
+        transform:scale(1.35);
+    }
+    to{
+        transform:scale(1);
+    }
 }
 
 </style>
@@ -315,32 +317,33 @@ ${message}
     `;
 }
 
-document
-.querySelectorAll('input, textarea')
-.forEach(el => {
 
-    el.addEventListener('focus', () => {
-        document.querySelector('.wrapper')
-            .classList.add('form-focused');
+const wrapper = document.querySelector(".wrapper");
+const fields = document.querySelectorAll("input, textarea");
+
+function zoomIn(){
+    wrapper.classList.remove("zoom-out");
+    wrapper.classList.add("zoom-in");
+}
+
+function zoomOut(){
+    wrapper.classList.remove("zoom-in");
+    wrapper.classList.add("zoom-out");
+}
+
+fields.forEach(field => {
+    field.addEventListener("focus", zoomIn);
+
+    field.addEventListener("blur", () => {
+        setTimeout(() => {
+            if(
+                document.activeElement.tagName !== "INPUT" &&
+                document.activeElement.tagName !== "TEXTAREA"
+            ){
+                zoomOut();
+            }
+        }, 200);
     });
-
-});
-
-window.addEventListener("focusout", () => {
-
-    setTimeout(() => {
-
-        if (
-            !document.activeElement ||
-            document.activeElement.tagName !== "INPUT" &&
-            document.activeElement.tagName !== "TEXTAREA"
-        ) {
-            document.querySelector(".wrapper")
-                .classList.remove("form-focused");
-        }
-
-    }, 300);
-
 });
 
 form.addEventListener("submit", function(e){
